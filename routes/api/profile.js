@@ -31,5 +31,50 @@ router.get('/', passport.authenticate('jwt', { session: false }),
         res.json(profile);
       })
       .catch((err) => res.status(404).json(err));
-  })
+  });
+
+// @route   POST api/profile
+// @desc    Create or edit user profile
+// @access  Private
+router.post('/', passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // Get fields
+    const { skills, youtube, twitter, facebook, linkedin, instagram } = req.body;
+    const profileFields = {
+      ...req.body,
+      user: req.user.id,
+      skills: skills.split(','),
+      social: { youtube, twitter, facebook, linkedin, instagram }
+    };
+
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        if (profile) {
+          // Update
+          Profile.findOneAndUpdate(
+            { user: req.user.id },
+            { $set: profileFields },
+            { new: true }
+          )
+            .then((profile) => res.json(profile));
+        } else {
+          // Create
+
+          // Check if handle exists
+          Profile.findOne({ handle: profileFields.handle })
+            .then((profile) => {
+              if (profile) {
+                errors.handle = 'That handle already exists';
+                res.status(400).json(errors);
+              }
+
+              // Save Profile
+              new Profile(profileFields)
+                .save()
+                .then((profile) => res.json(profile));
+            });
+        }
+      })
+  });
+
 module.exports = router;
