@@ -38,6 +38,26 @@ router.get('/handle/:handle', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+// @route   GET api/profile/user/:user_id (backend route)
+// @desc    Get profile by user ID
+// @access  Public
+
+router.get('/user/:user_id', (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.params.user_id })
+    .populate('user', ['name', 'avatar'])
+    .then((profile) => {
+      if (!profile) {
+        errors.noprofile = 'There is no profile for this user';
+        res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch((err) => res.json({ profile: 'There is no profile for this user' }));
+});
+
 // @route   GET api/profile
 // @desc    Get current users profile
 // @access  Private
