@@ -37,6 +37,26 @@ router.get('/', passport.authenticate('jwt', { session: false }),
       .catch((err) => res.status(404).json(err));
   });
 
+// @route   GET api/profile/handle/:handle (backend route)
+// @desc    Get profile by handle
+// @access  Public
+
+router.get('/handle/:handle', (req, res) => {
+  const errors = {};
+
+  Profile.findOneAndDelete({ handle: req.params.handle })
+    .populate('user', ['name', 'avatar'])
+    .then((profile) => {
+      if (!profile) {
+        errors.noprofile = 'There is no profile for this user';
+        res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch((err) => res.json(err));
+});
+
 // @route   POST api/profile
 // @desc    Create or edit user profile
 // @access  Private
