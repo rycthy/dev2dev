@@ -173,4 +173,27 @@ router.post('/experience', passport.authenticate('jwt', { session: false }),
       .catch((err) => res.status(400).json(err));
   });
 
+// @route   POST api/profile/edcuation
+// @desc    Add education to profile
+// @access  Private
+
+router.post('/education', passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // const { errors, isValid } = validateExperienceInput(req.body);
+
+    // // Check validation
+    // if (!isValid) {
+    //   return res.status(400).json(errors);
+    // }
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        const newEdu = req.body;
+        profile.education.unshift(newEdu);
+        profile.save()
+          .then(profile => res.json(profile))
+          .catch((err) => res.status(400).json(err));
+      })
+      .catch((err) => res.status(400).json(err));
+  });
+
 module.exports = router;
