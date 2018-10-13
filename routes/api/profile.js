@@ -13,10 +13,30 @@ const User = require('../../models/User');
 
 // @route   GET api/profile/test
 // @desc    Tests profile route
-// @access    Public
+// @access  Public
 
 router.get('/test',
   (req, res) => res.json({ msg: "Profile Works" }));
+
+// @route   GET api/profile/all
+// @desc    Get all profiles
+// @access  Public
+
+router.get('/all', (req, res) => {
+  const errors = {};
+
+  Profile.find()
+    .populate('user', ['name', 'avatar'])
+    .then((profiles) => {
+      if (!profiles || profiles.length === 0) {
+        errors.noprofile = 'There are no profiles';
+        return res.status(404).json(errors);
+      }
+
+      return res.json(profiles);
+    })
+    .catch((err) => res.status(404).json({ profile: 'There are no profiles' }));
+});
 
 // @route   GET api/profile/handle/:handle (backend route)
 // @desc    Get profile by handle
@@ -30,10 +50,10 @@ router.get('/handle/:handle', (req, res) => {
     .then((profile) => {
       if (!profile) {
         errors.noprofile = 'There is no profile for this user';
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
 
-      res.json(profile);
+      return res.json(profile);
     })
     .catch((err) => res.json(err));
 });
@@ -50,12 +70,13 @@ router.get('/user/:user_id', (req, res) => {
     .then((profile) => {
       if (!profile) {
         errors.noprofile = 'There is no profile for this user';
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
 
-      res.json(profile);
+      return res.json(profile);
     })
-    .catch((err) => res.json({ profile: 'There is no profile for this user' }));
+    .catch((err) => res.json({ profile: 'There is no profile for this user' }
+    ));
 });
 
 // @route   GET api/profile
@@ -116,7 +137,7 @@ router.post('/', passport.authenticate('jwt', { session: false }),
             .then((profile) => {
               if (profile) {
                 errors.handle = 'That handle already exists';
-                res.status(400).json(errors);
+                return res.status(400).json(errors);
               }
 
               // Save Profile
