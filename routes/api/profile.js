@@ -163,6 +163,7 @@ router.post('/experience', passport.authenticate('jwt', { session: false }),
           .then(profile => res.json(profile))
           .catch((err) => res.status(400).json(err));
       })
+      .catch((err) => res.status(400).json(err));
   });
 
 module.exports = router;
