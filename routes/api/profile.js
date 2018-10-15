@@ -10,7 +10,7 @@ const validateEducationInput = require('../../validation/education');
 
 // Load Profile model
 const Profile = require('../../models/Profile');
-// Load User Profile (??)
+// Load User Model
 const User = require('../../models/User');
 
 // @route   GET api/profile/test
@@ -230,6 +230,20 @@ router.delete('/education/:edu_id', passport.authenticate('jwt', { session: fals
         return profile.save();
       })
       .then((profile) => res.json(profile))
+      .catch((err) => res.status(400).json(err));
+  });
+
+// @route   DELETE api/profile/
+// @desc    Delete user and profile
+// @access  Private
+
+router.delete('/', passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id })
+      .then(() => {
+        User.findOneAndRemove({ _id: req.user.id })
+          .then(() => res.json({ success: true }))
+      })
       .catch((err) => res.status(400).json(err));
   });
 
