@@ -135,4 +135,27 @@ router.post('/unlike/:id', passport.authenticate('jwt', { session: false }),
       .catch((err) => res.status(404).json({ postnotfound: 'No post found' }));
   });
 
+// @route   POST api/posts/comment/:id
+// @desc    Add comment to a post
+// @access  Private
+router.post('/comment/:id', passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then((post) => {
+        if (!post) {
+          return res
+            .status(404)
+            .json({ nopostfound: 'Oops! Looks like that post is no more' });
+        }
+        const newComment = {
+          ...req.body,
+          user: req.user.id
+        }
+        post.comments.unshift(newComment);
+        post.save().then((post) => res.json(post))
+          .catch((err) => res.status(400).json(err));
+      })
+      .catch((err) => res.status(404).json({ postnotfound: 'No post found' }));
+  });
+
 module.exports = router;
