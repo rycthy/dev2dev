@@ -162,4 +162,33 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }),
       .catch((err) => res.status(404).json({ postnotfound: 'No post found' }));
   });
 
+// @route   DELETE api/posts/comment/:id/:comment_id
+// @desc    Remove comment from post
+// @access  Private
+router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then((post) => {
+        if (!post) {
+          return res
+            .status(404)
+            .json({ nopostfound: 'Oops! Looks like that post is no more' });
+        } else if (
+          !post.comments.find((comment) => comment._id.toString() === req.params.comment_id)
+        ) {
+          return res.status(404).json({ nocomment: 'Comment does not exist' });
+        }
+        else if (
+          post.comments.find((comment) => comment._id.toString() === req.params.comment_id).user.toString() !== req.user.id.toString()
+        ) {
+          return res.status(401).json({ notauthorized: 'User not authorized to delete this comment' })
+        }
+        const updatedComments = post.comments.filter((comment) => comment._id.toString() !== req.params.comment_id);
+        post.comments = updatedComments;
+        post.save().then((post) => res.json(post))
+          .catch((err) => res.status(400).json(err));
+      })
+      .catch((err) => res.status(404).json({ postnotfound: 'No post found' }));
+  });
+
 module.exports = router;
