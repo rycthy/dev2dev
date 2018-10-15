@@ -107,4 +107,32 @@ router.post('/like/:id', passport.authenticate('jwt', { session: false }),
       .catch((err) => res.status(404).json({ postnotfound: 'No post found' }));
   });
 
+// @route   POST api/posts/unlike/:id
+// @desc    Unlike post
+// @access  Private
+
+router.post('/unlike/:id', passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then((post) => {
+        if (!post) {
+          return res
+            .status(404)
+            .json({ nopostfound: 'Oops! Looks like that post is no more' });
+        }
+        else if (
+          post.likes
+            .filter(like => like.user.toString() === req.user.id)
+            .length === 0
+        ) {
+          return res.status(400).json({ notliked: 'You have not yet liked this post' });
+        }
+        const updatedLikes = post.likes.filter((like) => like.user.toString() !== req.user.id);
+        post.likes = updatedLikes;
+        post.save().then((post) => res.json(post))
+          .catch((err) => res.status(400).json(err));
+      })
+      .catch((err) => res.status(404).json({ postnotfound: 'No post found' }));
+  });
+
 module.exports = router;
