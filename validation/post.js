@@ -12,11 +12,11 @@ module.exports = function validatePostInput(data) {
     errors.text = 'Post must be between 10 and 30 characters';
   }
   if (Validator.isEmpty(data.text)) {
-    errors.text = "Please enter your text";
+    errors.text = 'Please enter your text';
   }
 
   return {
     errors,
     isValid: isEmpty(errors)
-  }
-}
+  };
+};

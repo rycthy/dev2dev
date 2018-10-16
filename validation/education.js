@@ -12,20 +12,20 @@ module.exports = function validateEducationInput(data) {
   data.from = !isEmpty(data.from) ? data.from : '';
 
   if (Validator.isEmpty(data.school)) {
-    errors.school = "Please enter your school";
+    errors.school = 'Please enter your school';
   }
   if (Validator.isEmpty(data.degree)) {
-    errors.degree = "Please enter your degree";
+    errors.degree = 'Please enter your degree';
   }
   if (Validator.isEmpty(data.fieldofstudy)) {
-    errors.fieldofstudy = "Please enter your field of study";
+    errors.fieldofstudy = 'Please enter your field of study';
   }
   if (Validator.isEmpty(data.from)) {
-    errors.from = "Please enter when you started this position";
+    errors.from = 'Please enter when you started this position';
   }
 
   return {
     errors,
     isValid: isEmpty(errors)
-  }
-}
+  };
+};

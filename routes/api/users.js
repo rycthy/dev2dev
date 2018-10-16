@@ -15,7 +15,7 @@ const validateLoginInput = require('../../validation/login');
 // @desc    Tests users route
 // @access    Public
 
-router.get('/test', (req, res) => res.json({ msg: "Users Works" }));
+router.get('/test', (req, res) => res.json({ msg: 'Users Works' }));
 
 // @route   GET api/users/register
 // @desc    Register user
@@ -29,35 +29,35 @@ router.post('/register', (req, res) => {
   }
 
   // checks to see if email is already registered
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (user) {
-        errors.email = 'Hmmm, looks like that email already exists';
-        return res.status(400).json(errors);
-      } else {
-        const avatar = gravatar.url(req.body.email, {
-          s: '200',
-          r: 'pg',
-          d: 'mm'
-        });
-        const newUser = new User({
-          name: req.body.name,
-          email: req.body.email,
-          avatar,
-          password: req.body.password
-        });
+  User.findOne({ email: req.body.email }).then((user) => {
+    if (user) {
+      errors.email = 'Hmmm, looks like that email already exists';
+      return res.status(400).json(errors);
+    } else {
+      const avatar = gravatar.url(req.body.email, {
+        s: '200',
+        r: 'pg',
+        d: 'mm'
+      });
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        avatar,
+        password: req.body.password
+      });
 
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
-            newUser.password = hash;
-            newUser.save()
-              .then((user) => res.json(user))
-              .catch((err) => console.log(err));
-          })
-        })
-      }
-    })
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+          newUser
+            .save()
+            .then((user) => res.json(user))
+            .catch((err) => console.log(err));
+        });
+      });
+    }
+  });
 });
 
 // @route   GET api/users/login
@@ -76,39 +76,38 @@ router.post('/login', (req, res) => {
   const password = req.body.password;
 
   // Find user by email
-  User.findOne({ email })
-    .then((user) => {
-      // check for user
-      if (!user) {
-        errors.email = 'User not found'
-        return res.status(404).json(errors)
-      }
+  User.findOne({ email }).then((user) => {
+    // check for user
+    if (!user) {
+      errors.email = 'User not found';
+      return res.status(404).json(errors);
+    }
 
-      // Check password
-      bcrypt.compare(password, user.password)
-        .then((isMatch) => {
-          if (isMatch) {
-            // User Matched
-            const payload = { id: user.id, name: user.name, avatar: user.avatar } // create JWT payload
+    // Check password
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (isMatch) {
+        // User Matched
+        const payload = { id: user.id, name: user.name, avatar: user.avatar }; // create JWT payload
 
-            // Sign Token
-            jwt.sign(
-              payload,
-              keys.secretOrKey,
-              { expiresIn: 3600 },
-              (err, token) => {
-                res.json({
-                  success: true,
-                  token: `Bearer ${token}`
-                })
-              });
-          } else {
-            errors.password = 'Password incorrect'
-            return res.status(400).json(errors);
+        // Sign Token
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          { expiresIn: 3600 },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: `Bearer ${token}`
+            });
           }
-        })
-    })
-})
+        );
+      } else {
+        errors.password = 'Password incorrect';
+        return res.status(400).json(errors);
+      }
+    });
+  });
+});
 
 // @route   GET api/users/current
 // @desc    Return current user
@@ -124,6 +123,5 @@ router.get(
     });
   }
 );
-
 
 module.exports = router;

@@ -11,17 +11,17 @@ module.exports = function validateExperienceInput(data) {
   data.from = !isEmpty(data.from) ? data.from : '';
 
   if (Validator.isEmpty(data.title)) {
-    errors.title = "Please enter your title";
+    errors.title = 'Please enter your title';
   }
   if (Validator.isEmpty(data.company)) {
-    errors.company = "Please enter your company";
+    errors.company = 'Please enter your company';
   }
   if (Validator.isEmpty(data.from)) {
-    errors.from = "Please enter when you started this position";
+    errors.from = 'Please enter when you started this position';
   }
 
   return {
     errors,
     isValid: isEmpty(errors)
-  }
-}
+  };
+};
