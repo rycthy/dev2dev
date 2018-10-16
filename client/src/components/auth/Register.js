@@ -61,6 +61,7 @@ class Register extends Component {
                     className="form-control form-control-lg"
                     placeholder="Confirm Password"
                     name="password2"
+                    value={this.state.password2}
                   />
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
