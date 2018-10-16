@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    errors: {}
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
