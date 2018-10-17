@@ -2,23 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TextFieldGroup = ({
+  type,
   name,
   placeholder,
   value,
-  label,
-  error,
-  info,
-  type,
   onChange,
+  error,
+  label,
+  info,
   disabled
 }) => {
   return (
     <div className="form-group">
       <input
-        type={type}
         className={`form-control form-control-lg${error ? ' is-invalid' : ''}`}
-        placeholder={placeholder}
+        type={type}
         name={name}
+        placeholder={placeholder}
         value={value}
         onChange={onChange}
         disabled={disabled}
