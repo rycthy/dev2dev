@@ -12,6 +12,12 @@ class Register extends Component {
     password2: '',
     errors: {}
   };
+  componentDidMount = () => {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  };
+
   // TODO: stop managing error state in the component
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.errors) {

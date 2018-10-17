@@ -9,6 +9,12 @@ class Login extends Component {
     password: '',
     errors: {}
   };
+
+  componentDidMount = () => {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  };
   // TODO: stop managing error state in the component
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.auth.isAuthenticated) {
