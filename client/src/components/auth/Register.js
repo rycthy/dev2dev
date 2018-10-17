@@ -12,10 +12,10 @@ class Register extends Component {
     password2: '',
     errors: {}
   };
-
+  // TODO: stop managing error state in the component
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+      return this.setState({ errors: nextProps.errors });
     }
   };
 
