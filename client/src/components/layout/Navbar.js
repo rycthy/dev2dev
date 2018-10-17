@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { logoutUser } from '../../actions/authActions';
 
 class Navbar extends Component {
+  // TODO: redirect user to login page if they logout
   onLogoutClick = (e) => {
     e.preventDefault();
     this.props.logoutUser();
