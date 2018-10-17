@@ -16,7 +16,7 @@ export const registerUser = (userData, history) => (dispatch) => {
     );
 };
 
-// Register user
+// Login user and store token in local storage
 export const loginUser = (userData) => (dispatch) => {
   axios
     .post('/api/users/login', userData)
@@ -47,4 +47,11 @@ export const setCurrentUser = (decoded) => {
     type: SET_CURRENT_USER,
     payload: decoded
   };
+};
+
+// Logout user
+export const logoutUser = () => (dispatch) => {
+  localStorage.removeItem('jwtToken');
+  setAuthToken(false);
+  dispatch(setCurrentUser({}));
 };
