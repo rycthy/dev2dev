@@ -8,6 +8,7 @@ export const registerUser = (userData, history) => (dispatch) => {
     .post('/api/users/register', userData)
     .then((res) => history.push('/login'))
     .catch((err) =>
+      //TODO: DRY (see line 36)
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -32,6 +33,7 @@ export const loginUser = (userData) => (dispatch) => {
       dispatch(setCurrentUser(decoded));
     })
     .catch((err) =>
+      //TODO: DRY (see line 11)
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
