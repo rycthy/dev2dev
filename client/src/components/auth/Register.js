@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { registerUser } from '../../actions/authActions';
+import TextFieldGroup from '../common/TextFieldGroup';
 
 class Register extends Component {
   state = {
@@ -49,78 +50,50 @@ class Register extends Component {
                 Create your DevConnector account
               </p>
               <form noValidate onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className={`form-control form-control-lg${
-                      errors.name ? ' is-invalid' : ''
-                    }`}
-                    placeholder="Name"
-                    name="name"
-                    value={this.state.name}
-                    onChange={this.onChange}
-                  />
-                  {errors.name && (
-                    <div className="invalid-feedback">{errors.name}</div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={`form-control form-control-lg${
-                      errors.email ? ' is-invalid' : ''
-                    }`}
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                  />
-                  {errors.email && (
-                    <div className="invalid-feedback">{errors.email}</div>
-                  )}
-                  <small className="form-text text-muted">
-                    If you want a profile picture, we'll automatically upload
-                    your{' '}
+                <TextFieldGroup
+                  name="name"
+                  placeholder="Name"
+                  value={this.state.name}
+                  onChange={this.onChange}
+                  error={errors.name}
+                />
+                <TextFieldGroup
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  error={errors.email}
+                  info={[
+                    `If you want a profile picture, we'll automatically upload
+                  your `,
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
                       href="https://gravatar.com"
+                      key="gravatar-link"
                     >
                       Gravatar
-                    </a>{' '}
-                    if you register with a Gravatar-associated email!
-                  </small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={`form-control form-control-lg${
-                      errors.password ? ' is-invalid' : ''
-                    }`}
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                  {errors.password && (
-                    <div className="invalid-feedback">{errors.password}</div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={`form-control form-control-lg${
-                      errors.password2 ? ' is-invalid' : ''
-                    }`}
-                    placeholder="Confirm Password"
-                    name="password2"
-                    value={this.state.password2}
-                    onChange={this.onChange}
-                  />
-                  {errors.password2 && (
-                    <div className="invalid-feedback">{errors.password2}</div>
-                  )}
-                </div>
+                    </a>,
+                    ` if you register with a Gravatar-associated email!`
+                  ]}
+                />
+                <TextFieldGroup
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                  error={errors.password}
+                />
+                <TextFieldGroup
+                  type="password"
+                  name="password2"
+                  placeholder="Confirm Password"
+                  value={this.state.password2}
+                  onChange={this.onChange}
+                  error={errors.password2}
+                />
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
