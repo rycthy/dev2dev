@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCurrentProfile } from '../../actions/profileActions';
+import Spinner from '../common/Spinner';
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -13,7 +14,7 @@ class Dashboard extends Component {
     const { profile, loading } = this.props.profile;
     let dashboardContent;
     !profile || loading
-      ? (dashboardContent = <h4>Loading...</h4>)
+      ? (dashboardContent = <Spinner />)
       : (dashboardContent = <h1>Hello</h1>);
     return (
       <div className="dashboard">
