@@ -5,7 +5,9 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import InputGroup from '../common/InputGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
+import { createProfile } from '../../actions/profileActions';
 
+//TODO: disable user with profile to visit this page
 class CreateProfile extends Component {
   state = {
     displaySocialInputs: false,
@@ -25,6 +27,12 @@ class CreateProfile extends Component {
     errors: {}
   };
 
+  static getDerivedStateFromProps(nextProps) {
+    if (nextProps.errors) {
+      return { errors: nextProps.errors };
+    }
+  }
+
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
   onToggleSocial = () => {
     this.setState((prevState) => ({
@@ -33,7 +41,7 @@ class CreateProfile extends Component {
   };
   onSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.createProfile(this.state, this.props.history);
   };
 
   render() {
@@ -150,7 +158,7 @@ class CreateProfile extends Component {
             <TextFieldGroup
               type="text"
               name="skills"
-              placeholder="Skills"
+              placeholder="* Skills"
               value={this.state.skills}
               onChange={this.onChange}
               info="Boast your skills, separated with a comma (e.g. JavaScript,CSS3,HTML5,Node.js)"
@@ -174,7 +182,11 @@ class CreateProfile extends Component {
               error={errors.bio}
             />
             <div className="mb-3">
-              <button onClick={this.onToggleSocial} className="btn btn-light">
+              <button
+                type="button"
+                onClick={this.onToggleSocial}
+                className="btn btn-light"
+              >
                 Add a social network
               </button>
               <span className="text-muted">
@@ -204,4 +216,7 @@ const mapStateToProps = (state) => ({
   profile: state.profile,
   errors: state.errors
 });
-export default connect(mapStateToProps)(CreateProfile);
+export default connect(
+  mapStateToProps,
+  { createProfile }
+)(CreateProfile);
