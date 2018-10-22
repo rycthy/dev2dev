@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-// import InputGroup from '../common/InputGroup';
+import InputGroup from '../common/InputGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 
@@ -37,7 +37,7 @@ class CreateProfile extends Component {
   };
 
   render() {
-    const { errors } = this.state;
+    const { errors, displaySocialInputs } = this.state;
     const statusOptions = [
       { label: '* Position', value: 0 },
       { label: 'Full Stack Developer', value: 'Full Stack Developer' },
@@ -46,6 +46,53 @@ class CreateProfile extends Component {
       { label: 'Student', value: 'Student' },
       { label: 'Other', value: 'Other' }
     ];
+    let socialInputs;
+    if (displaySocialInputs) {
+      socialInputs = (
+        <div>
+          <InputGroup
+            placeholder="Twitter Profile URL"
+            name="twitter"
+            icon="fab fa-fw fa-twitter"
+            value={this.state.twitter}
+            onChange={this.onChange}
+            error={errors.twitter}
+          />
+          <InputGroup
+            placeholder="Facebook Page URL"
+            name="facebook"
+            icon="fab fa-fw fa-facebook"
+            value={this.state.facebook}
+            onChange={this.onChange}
+            error={errors.facebook}
+          />
+          <InputGroup
+            placeholder="Linkedin Profile URL"
+            name="linkedin"
+            icon="fab fa-fw fa-linkedin"
+            value={this.state.linkedin}
+            onChange={this.onChange}
+            error={errors.linkedin}
+          />
+          <InputGroup
+            placeholder="YouTube Channel URL"
+            name="youtube"
+            icon="fab fa-fw fa-youtube"
+            value={this.state.youtube}
+            onChange={this.onChange}
+            error={errors.youtube}
+          />
+          <InputGroup
+            placeholder="Instagram Page URL"
+            name="instagram"
+            icon="fab fa-fw fa-instagram"
+            value={this.state.instagram}
+            onChange={this.onChange}
+            error={errors.instagram}
+          />
+        </div>
+      );
+    }
     return (
       <div className="create-profile">
         <div className="container" />
@@ -135,6 +182,12 @@ class CreateProfile extends Component {
                 Optional
               </span>
             </div>
+            {socialInputs}
+            <input
+              type="submit"
+              value="Submit"
+              className="btn btn-info btn-block mt-4"
+            />
           </form>
         </div>
       </div>
