@@ -6,7 +6,6 @@ import { logoutUser } from '../../actions/authActions';
 import { clearCurrentProfile } from '../../actions/profileActions';
 
 class Navbar extends Component {
-  // TODO: redirect user to login page if they logout
   onLogoutClick = (e) => {
     e.preventDefault();
     this.props.logoutUser();
