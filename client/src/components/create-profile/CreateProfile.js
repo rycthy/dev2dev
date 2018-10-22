@@ -26,6 +26,11 @@ class CreateProfile extends Component {
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onToggleSocial = () => {
+    this.setState((prevState) => ({
+      displaySocialInputs: !prevState.displaySocialInputs
+    }));
+  };
   onSubmit = (e) => {
     e.preventDefault();
     console.log(this.state);
@@ -121,6 +126,15 @@ class CreateProfile extends Component {
               info="No need to tell us your life story (unless you want to). A short bio will do."
               error={errors.bio}
             />
+            <div className="mb-3">
+              <button onClick={this.onToggleSocial} className="btn btn-light">
+                Add a social network
+              </button>
+              <span className="text-muted">
+                {` `}
+                Optional
+              </span>
+            </div>
           </form>
         </div>
       </div>
