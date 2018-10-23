@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../actions/profileActions';
+import ProfileActions from './ProfileActions';
 import Spinner from '../common/Spinner';
 
 class Dashboard extends Component {
@@ -18,10 +19,14 @@ class Dashboard extends Component {
       ? (dashboardContent = <Spinner />)
       : Object.keys(profile).length > 0
         ? (dashboardContent = (
-            <p className="lead text-muted">
-              Welcome,{' '}
-              <Link to={`/profile/${profile.handle}`}>{user.name}</Link>!{' '}
-            </p>
+            <div>
+              <p className="lead text-muted">
+                Welcome,{' '}
+                <Link to={`/profile/${profile.handle}`}>{user.name}</Link>!{' '}
+              </p>
+              <ProfileActions />
+              {/* TODO: experience and education */}
+            </div>
           ))
         : (dashboardContent = (
             <div>
