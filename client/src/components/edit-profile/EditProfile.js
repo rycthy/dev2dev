@@ -34,44 +34,40 @@ class EditProfile extends Component {
   componentDidUpdate(prevProps) {
     if (!isEmpty(this.props.profile.profile)) {
       const profile = this.props.profile.profile;
-      profile.company = !isEmpty(profile.company) ? profile.company : '';
-      profile.website = !isEmpty(profile.website) ? profile.website : '';
-      profile.location = !isEmpty(profile.location) ? profile.location : '';
-      profile.githubusername = !isEmpty(profile.githubusername)
-        ? profile.githubusername
-        : '';
-      profile.bio = !isEmpty(profile.bio) ? profile.bio : '';
-      profile.social = !isEmpty(profile.social) ? profile.social : {};
-      profile.twitter = !isEmpty(profile.social.twitter)
-        ? profile.social.twitter
-        : '';
-      profile.linkedin = !isEmpty(profile.social.linkedin)
-        ? profile.social.linkedin
-        : '';
-      profile.youtube = !isEmpty(profile.social.youtube)
-        ? profile.social.youtube
-        : '';
-      profile.instagram = !isEmpty(profile.social.instagram)
-        ? profile.social.instagram
-        : '';
-      profile.skills = Array.isArray(profile.skills)
+      const skillsCSV = Array.isArray(profile.skills)
         ? profile.skills.join(',')
         : profile.skills;
+      const {
+        company = '',
+        website = '',
+        location = '',
+        githubusername = '',
+        bio = '',
+        handle = '',
+        status = 0,
+        social: {
+          twitter = '',
+          facebook = '',
+          instagram = '',
+          youtube = '',
+          linkedin = ''
+        } = {}
+      } = profile;
       if (prevProps.profile.profile !== profile) {
         this.setState({
-          handle: profile.handle,
-          status: profile.status,
-          company: profile.company,
-          website: profile.website,
-          location: profile.location,
-          githubusername: profile.githubusername,
-          bio: profile.bio,
-          social: profile.social,
-          twitter: profile.twitter,
-          linkedin: profile.linkedin,
-          youtube: profile.youtube,
-          instagram: profile.instagram,
-          skills: profile.skills
+          handle,
+          company,
+          website,
+          location,
+          status,
+          skills: skillsCSV,
+          githubusername,
+          bio,
+          twitter,
+          facebook,
+          linkedin,
+          youtube,
+          instagram
         });
       }
     }
