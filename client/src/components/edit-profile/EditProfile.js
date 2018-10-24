@@ -6,8 +6,8 @@ import InputGroup from '../common/InputGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import { createProfile, getCurrentProfile } from '../../actions/profileActions';
+import isEmpty from '../../validation/is-empty';
 
-//TODO: disable user with profile to visit this page
 class EditProfile extends Component {
   state = {
     displaySocialInputs: false,
@@ -27,10 +27,57 @@ class EditProfile extends Component {
     errors: {}
   };
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.props.getCurrentProfile();
+  };
+
+  componentDidUpdate(prevProps) {
+    if (!isEmpty(this.props.profile.profile)) {
+      const profile = this.props.profile.profile;
+      profile.company = !isEmpty(profile.company) ? profile.company : '';
+      profile.website = !isEmpty(profile.website) ? profile.website : '';
+      profile.location = !isEmpty(profile.location) ? profile.location : '';
+      profile.githubusername = !isEmpty(profile.githubusername)
+        ? profile.githubusername
+        : '';
+      profile.bio = !isEmpty(profile.bio) ? profile.bio : '';
+      profile.social = !isEmpty(profile.social) ? profile.social : {};
+      profile.twitter = !isEmpty(profile.social.twitter)
+        ? profile.social.twitter
+        : '';
+      profile.linkedin = !isEmpty(profile.social.linkedin)
+        ? profile.social.linkedin
+        : '';
+      profile.youtube = !isEmpty(profile.social.youtube)
+        ? profile.social.youtube
+        : '';
+      profile.instagram = !isEmpty(profile.social.instagram)
+        ? profile.social.instagram
+        : '';
+      profile.skills = Array.isArray(profile.skills)
+        ? profile.skills.join(',')
+        : profile.skills;
+      if (prevProps.profile.profile !== profile) {
+        this.setState({
+          handle: profile.handle,
+          status: profile.status,
+          company: profile.company,
+          website: profile.website,
+          location: profile.location,
+          githubusername: profile.githubusername,
+          bio: profile.bio,
+          social: profile.social,
+          twitter: profile.twitter,
+          linkedin: profile.linkedin,
+          youtube: profile.youtube,
+          instagram: profile.instagram,
+          skills: profile.skills
+        });
+      }
+    }
   }
 
+  // TODO: fix error message persistence if you navigate away from page without submitting
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.errors) {
       return { errors: nextProps.errors };
@@ -212,6 +259,8 @@ class EditProfile extends Component {
 }
 
 EditProfile.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
