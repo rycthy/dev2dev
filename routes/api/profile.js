@@ -101,7 +101,6 @@ router.get(
   }
 );
 
-// TODO: bug: user can change their handle to another users if they are editing thier profile
 // @route   POST api/profile
 // @desc    Create or edit user profile
 // @access  Private
@@ -131,6 +130,18 @@ router.post(
       skills: skills.split(','),
       social: { youtube, twitter, facebook, linkedin, instagram }
     };
+    // TODO: bug: user can change their handle to another users if they are editing thier profile.
+    // Possible solution that's tripping up error handling:
+    // Profile.findOne({ handle: profileFields.handle })
+    //   .where('user')
+    //   .ne(req.user.id)
+    //   .then((profile) => {
+    //     if (profile) {
+    //       errors.handle = 'That handle already exists';
+    //       return res.status(400).json(errors);
+    //     }
+    //   })
+    //   .catch((err) => res.status(400).json(err));
 
     Profile.findOne({ user: req.user.id }).then((profile) => {
       if (profile) {
