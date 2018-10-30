@@ -101,6 +101,7 @@ router.get(
   }
 );
 
+// TODO: bug: user can change their handle to another users if they are editing thier profile
 // @route   POST api/profile
 // @desc    Create or edit user profile
 // @access  Private
