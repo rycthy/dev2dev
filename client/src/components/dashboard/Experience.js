@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Moment from 'react-moment';
 
 class Experience extends Component {
   render() {
@@ -8,7 +9,11 @@ class Experience extends Component {
         <td>{exp.company}</td>
         <td>{exp.title}</td>
         <td>
-          {exp.from} - {exp.to ? exp.to : 'present'}
+          <Moment format="MMM YYYY">{exp.from}</Moment> -{' '}
+          {exp.to ? <Moment format="MMM YYYY">{exp.to}</Moment> : 'present'}
+        </td>
+        <td>
+          <button className="btn btn-danger">Delete</button>
         </td>
       </tr>
     ));
